@@ -1,2 +1,7 @@
-# data_management_session
-Repository containing the slides of the data management session during the 2025 doctoral welcome week at WHU - Otto Beisheim School of Management.
+# Data Management Session
+ This repository contains the slides for the Data Management Session during the Doctoral Welcome Week at WHU - Otto Beisheim School of Management. The slides were created using Quarto.
+
+## Repository structure
+ It has the following folders:
+ - images: contains the images used in the presentation.
+ - materials: contains other files necessary for the presentation file.  
