@@ -22,11 +22,12 @@ header-includes:
 
 ## Opening Question
 
-If your laptop died right now and we handed you a new one, how long until you can reproduce your last analysis?
+Let's say you wrote your a research paper and your laptop died. 
+How long would it take you to reproduce your analyses with a new laptop?
 
-1.  Less than one hour (I'm fully backed up and scripted)
+1.  Less than one hour (easy!)
 
-2.  Between one hour and a day (it's possible but painful)
+2.  Between one hour and a day (It's possible but painful)
 
 3.  More than one day (I'd be stuck)
 
@@ -88,16 +89,6 @@ About 30% of the articles could not be reproduced, even under the new policy [@F
 \includegraphics[width =0.20\textwidth]{"images/you.png"} \\
 \end{center}
 ```
-## Who cares? We have AI!
-
--   People have made breathless claims about how AI is going to make learning code and working with data entirely obsolete.
--   But people who insist on these misconceptions are often invested in selling the hype or they easily fall prey to believing in science fiction movies and sensational internet videos.
--   LLMs are exciting, but to make them useful, you need to set realistic expectations:
-    -   LLMs are not conscious or sentient.
-    -   LLMs are far from perfect and even often wrong.
-    -   LLMs will not replace the need for you to code properly and organize your data. <!-- -   LLMs will not replace most human jobs (yet this won't prevent managers from thinking they can and replace people anyway) -->
--   LLMs are exciting support tools, but you must vigilantly check everything.
--   It’s entirely valid to forgo LLMs altogether when coding and working with data.
 
 ## The main goals of this session:
 
@@ -388,16 +379,33 @@ Usage:
 ## Summary and Wrap-up
 
 -   Across all fields of science, reproducibility has been under threat [@OSC_2015; @B_2016; @CDF_2016; @HLL_2000; @FGHKO_2023]
--   Good data management is vital. You, as a WHU doctoral student, can help by:
-    1.  Maintaining a good directory structure
-    2.  Using version control
-    3.  Integrating multiple languages
+-   Good data management is vital to ensure results are reproducible.
+-   You, as a WHU doctoral student, are vital:
+    1.  Maintain a good directory structure
+    2.  Use version control
+    3.  Integrate multiple languages (try Quarto)
+-   If you don't want to do it for science, then do it to save yourself lots of time and headache.
+
+## Good data management is just the start...
+
+-   Good data management is not enough.
 -   Ideally, we also need:
     -   Research material sharing (data, instruments, and code)
     -   Pre-registration
--   Many journals and institutions offer ways to pre-register and collect research materials in one place.
+-   Many journals and institutions offer ways to pre-register and collect research all materials (not just data and code) in one place.
     -   You can sync your repositories as well!
 -   My recommendation is to use the [Open Science Foundation](https://osf.io/)
+
+## What about AI?
+
+-   People have made breathless claims about how AI is going to make learning code and working with data entirely obsolete.
+-   But people who insist on these misconceptions are often invested in selling the hype or they easily fall prey to believing in science fiction movies and sensational internet videos.
+-   LLMs are exciting, but to make them useful, you need to set realistic expectations:
+    -   LLMs are not conscious or sentient.
+    -   LLMs are far from perfect and even often wrong.
+    -   LLMs will not replace the need for you to code properly and organize your data. <!-- -   LLMs will not replace most human jobs (yet this won't prevent managers from thinking they can and replace people anyway) -->
+-   LLMs are exciting support tools, but you must vigilantly check everything.
+-   It’s entirely valid to forgo LLMs altogether when coding and working with data.
 
 ## Thank you!
 
