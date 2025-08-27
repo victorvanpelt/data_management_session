@@ -396,15 +396,15 @@ Usage:
 
 ## What about AI?
 
--   People have made breathless claims about how AI is going to make learning code and working with data entirely obsolete.
--   But people who insist on these misconceptions are often invested in selling the hype or they easily fall prey to believing in science fiction movies and sensational internet videos.
--   LLMs are exciting, but to make them useful, you need to set realistic expectations:
+-   People have made breathless claims about AI, including that no human will ever have to code and program ever again.
+-   But people who insist on many of these misconceptions are often invested in selling the hype or they easily fall prey to believing in science fiction movies and sensational internet videos.
+-   LLMs, the conceptual category behind tools like ChatGPT, are exciting, but to make them useful, you need to set realistic expectations:
     -   LLMs are not conscious or sentient.
     -   LLMs are far from perfect and even often wrong.
     -   LLMs will not replace the need for you to code properly and organize your data. 
     -   LLMs will not replace most human jobs (yet this won't prevent managers from thinking they can and replace people anyway)
--   LLMs are exciting support tools, but you must vigilantly check everything.
--   It’s entirely valid to forgo LLMs altogether when coding and working with data.
+-   LLMs are exciting support tools producing output, but you must vigilantly check and verify everything.
+-   It’s entirely valid to forgo LLMs altogether, also when coding and working with data.
 
 ## Thank you!
 
