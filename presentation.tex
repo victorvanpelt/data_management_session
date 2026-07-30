@@ -138,9 +138,11 @@
  
 
 
-% WHU beamer theme (16:9) - v3
-% Usage: \input{materials/beamer_theme_16x9.sty}
-\ProvidesFile{00_theme.sty}[2026/03/13 WHU beamer theme v3]
+% WHU beamer theme (16:9) - v4
+% Usage (qmd):  include-in-header: talk_template.sty   (Quarto, lualatex)
+% Usage (tex):  \input{talk_template.sty}              (hand-written beamer, xelatex)
+% Requires 00_whu_logo.png in the working directory.
+\ProvidesFile{talk_template.sty}[2026/07/30 WHU beamer theme v4]
 
 \mode<presentation>
 
@@ -148,7 +150,6 @@
 \RequirePackage{tikz}
 \usetikzlibrary{calc,positioning,arrows.meta,shapes.geometric,fit,backgrounds}
 \RequirePackage{etoolbox}
-\RequirePackage{ifxetex}
 \RequirePackage{booktabs}
 \RequirePackage{tabularx}
 \RequirePackage{ragged2e}
@@ -156,21 +157,43 @@
 \RequirePackage{appendixnumberbeamer}
 
 % ── Fonts ───────────────────────────────────────────────────────
-\RequirePackage{lmodern}
-\RequirePackage[T1]{fontenc}
-\RequirePackage[utf8]{inputenc}
+% Keep beamer from substituting text fonts into math mode.
+\usefonttheme{professionalfonts}
+% Quarto's lualatex path loads fontspec + unicode-math BEFORE this file.
+% In that case, set a real math font so \times, \rightarrow, the math
+% minus, and \checkmark render (they silently dropped before v4).
+% Without fontspec (hand-written .tex via xelatex), keep the legacy setup.
+\IfPackageLoadedTF{fontspec}{%
+  \IfPackageLoadedTF{unicode-math}{\setmathfont{Latin Modern Math}}{}%
+}{%
+  \RequirePackage{lmodern}
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage[utf8]{inputenc}
+}
 
 % ── Colors ──────────────────────────────────────────────────────
-\definecolor{whu_blue}{RGB}{5,70,150}
-\definecolor{whu_lightblue}{RGB}{0,165,220}
-\definecolor{whu_silvergray}{RGB}{230,235,240}
-\definecolor{whu_anthracite}{RGB}{80,84,89}
-\definecolor{whu_darkgray}{RGB}{60,60,60}
-\definecolor{whu_accent_green}{RGB}{0,128,85}
-\definecolor{whu_accent_red}{RGB}{180,40,40}
-\definecolor{whu_accent_orange}{RGB}{210,120,20}
-\definecolor{whu_lightgreen}{RGB}{230,245,235}
-\definecolor{whu_lightred}{RGB}{250,235,235}
+% WHU Color Guidelines: primary = WHU Blue + WHU Light Blue (+ white);
+% secondary = Silver Grey, Anthracite, black. These are the only base
+% colors this template uses.
+\definecolor{whu_blue}{RGB}{5,70,150}          % WHU Blue        #054696
+\definecolor{whu_lightblue}{RGB}{0,165,220}    % WHU Light Blue  #00A5DC
+\definecolor{whu_silvergray}{RGB}{230,235,240} % WHU Silver Grey #E6EBF0
+\definecolor{whu_anthracite}{RGB}{80,84,89}    % WHU Anthracite  #505459
+
+% Shade ramp (guidelines "Shades" = darker, "Light" = lighter).
+% For lighter steps use inline tints: whu_blue!60, whu_blue!40, whu_blue!20
+% (same for whu_lightblue). Named darker steps:
+\colorlet{whu_blue_dark}{whu_blue!70!black}
+\colorlet{whu_lightblue_dark}{whu_lightblue!70!black}
+
+% Legacy color names (pre-v4 off-brand accents), remapped onto the
+% primary ramp so older decks still compile and come out on-brand:
+\colorlet{whu_accent_green}{whu_lightblue}
+\colorlet{whu_accent_red}{whu_blue_dark}
+\colorlet{whu_accent_orange}{whu_lightblue_dark}
+\colorlet{whu_lightgreen}{whu_lightblue!15}
+\colorlet{whu_lightred}{whu_blue!10}
+\colorlet{whu_darkgray}{whu_anthracite}
 
 % ── Global beamer color setup ───────────────────────────────────
 \setbeamercolor*{title}{fg=whu_blue}
@@ -194,13 +217,13 @@
 \setbeamercolor*{frametitle}{fg=whu_blue}
 \setbeamercolor*{page number in head/foot}{fg=whu_blue}
 
-% Blocks
+% Blocks (primary-blue family only)
 \setbeamercolor*{block title}{fg=whu_blue,bg=whu_silvergray}
 \setbeamercolor*{block body}{fg=black,bg=whu_silvergray!30}
-\setbeamercolor*{block title alerted}{fg=white,bg=whu_accent_red}
-\setbeamercolor*{block body alerted}{fg=black,bg=whu_lightred}
-\setbeamercolor*{block title example}{fg=white,bg=whu_accent_green}
-\setbeamercolor*{block body example}{fg=black,bg=whu_lightgreen}
+\setbeamercolor*{block title alerted}{fg=white,bg=whu_blue_dark}
+\setbeamercolor*{block body alerted}{fg=black,bg=whu_blue!10}
+\setbeamercolor*{block title example}{fg=white,bg=whu_lightblue}
+\setbeamercolor*{block body example}{fg=black,bg=whu_lightblue!15}
 
 % ── Font sizes ──────────────────────────────────────────────────
 \setbeamerfont{title}{size=\LARGE,series=\bfseries}
@@ -211,7 +234,7 @@
 \setbeamerfont{footnote}{size=\tiny}
 
 % ── Hyperlinks ──────────────────────────────────────────────────
-\hypersetup{colorlinks=true,urlcolor=whu_lightblue,linkcolor=whu_lightblue}
+\hypersetup{colorlinks=true,urlcolor=whu_lightblue,linkcolor=whu_blue}
 
 % ── Navigation / footline ──────────────────────────────────────
 \setbeamertemplate{navigation symbols}{}
@@ -288,6 +311,7 @@
 
 % ── Section divider slide ───────────────────────────────────────
 % Usage: \sectionslide{Section Title}
+% NOTE: opens its own frame; in a qmd it must sit OUTSIDE any ## frame.
 \newcommand{\sectionslide}[1]{%
   \begin{frame}[plain]
     \vfill
@@ -304,8 +328,10 @@
   \end{frame}%
 }
 
-% ── Highlight box (gray background) ────────────────────────────
+% ── Highlight box: THE box of this template ────────────────────
 % Usage: \highlightbox{Key definition or important text.}
+% For a labeled box, put the label inside:
+%   \highlightbox{\textbf{\textcolor{whu_blue}{Key takeaway:}} ...}
 \newcommand{\highlightbox}[1]{%
   \begin{tikzpicture}
     \node[fill=whu_silvergray,rounded corners=3pt,inner sep=8pt,
@@ -313,18 +339,19 @@
   \end{tikzpicture}%
 }
 
+% Deprecated box aliases - kept so pre-v4 decks compile; all of them
+% now render as a \highlightbox with their printed label preserved.
+\newcommand{\discussionprompt}[1]{\highlightbox{#1}}
+\newcommand{\how}[1]{%
+  \highlightbox{\textbf{\textcolor{whu_blue}{How?}} #1}}
+\newcommand{\takeaway}[1]{%
+  \highlightbox{\textbf{\textcolor{whu_blue}{Key takeaway:}} #1}}
+
 % ── Source citation at bottom of slide ─────────────────────────
 % Usage: \source{Author (Year)}
 \newcommand{\source}[1]{%
   \vfill
   {\usebeamerfont{footnote}\textcolor{whu_anthracite}{Source: #1}}%
-}
-
-% ── AGENTS.md rule tag at bottom of slide ──────────────────────
-% Usage: \agentrule{Never modify the raw data in 0\_data/. It is read-only.}
-\newcommand{\agentrule}[1]{%
-  \vfill
-  {\usebeamerfont{footnote}\itshape\textcolor{whu_anthracite}{AGENTS.md: ``#1''}}%
 }
 
 % ── Single stat callout ────────────────────────────────────────
@@ -348,52 +375,11 @@
     \end{column}
     \begin{column}{0.48\textwidth}
       \begin{center}
-        {\fontsize{38}{44}\selectfont\textcolor{whu_accent_green}{\textbf{#3}}}\\[4pt]
+        {\fontsize{38}{44}\selectfont\textcolor{whu_lightblue}{\textbf{#3}}}\\[4pt]
         {\normalsize\textcolor{whu_anthracite}{#4}}
       \end{center}
     \end{column}
   \end{columns}%
-}
-
-% ── Discussion prompt box ──────────────────────────────────────
-%Usage: \discussionprompt{What would you do if...?}
-% \newcommand{\discussionprompt}[1]{%
-%   \begin{tikzpicture}
-%     \node[fill=whu_blue!10,draw=whu_blue,rounded corners=4pt,
-%           inner sep=10pt,text width=\linewidth-24pt,
-%           font=\large\itshape] {#1};
-%   \end{tikzpicture}%
-% }
-
-\newcommand{\discussionprompt}[1]{%
-  \begin{tikzpicture}
-    \node[fill=whu_blue!8,draw=whu_blue,rounded corners=4pt,
-          inner sep=10pt,text width=\linewidth-24pt] {#1};
-  \end{tikzpicture}%
-}
-
-% ── How box ───────────────────────────────────────────
-% Usage: \how{The main point the student should remember.}
-\newcommand{\how}[1]{%
-  \begin{tikzpicture}
-    \node[fill=whu_blue!8,draw=whu_blue,line width=0.8pt,
-          rounded corners=4pt,inner sep=10pt,
-          text width=\linewidth-24pt] {%
-      {\textbf{\textcolor{whu_blue}{How?}} #1}%
-    };
-  \end{tikzpicture}%
-}
-
-% ── Key takeaway box ───────────────────────────────────────────
-% Usage: \takeaway{The main point the student should remember.}
-\newcommand{\takeaway}[1]{%
-  \begin{tikzpicture}
-    \node[fill=whu_blue!8,draw=whu_blue,line width=0.8pt,
-          rounded corners=4pt,inner sep=10pt,
-          text width=\linewidth-24pt] {%
-      {\textbf{\textcolor{whu_blue}{Key takeaway:}} #1}%
-    };
-  \end{tikzpicture}%
 }
 
 % ── Quote / Epigraph ──────────────────────────────────────────
@@ -403,7 +389,7 @@
   \begin{center}
     \begin{minipage}{0.8\linewidth}
       {\Large\itshape\textcolor{whu_anthracite}{``#1''}}\\[10pt]
-      \hfill{\normalsize\textcolor{whu_blue}{\textbf{--- #2}}}
+      \hfill{\normalsize\textcolor{whu_blue}{\textbf{#2}}}
     \end{minipage}
   \end{center}
   \vfill
@@ -480,8 +466,27 @@
 
 % ── Comparison marks ──────────────────────────────────────────
 % Usage: \cmark and \xmark in tables and lists
-\newcommand{\cmark}{\textcolor{whu_accent_green}{\textbf{\checkmark}}}
-\providecommand{\xmark}{\textcolor{whu_accent_red}{\textbf{\texttimes}}}
+% Drawn in TikZ: the fonts on the Quarto/lualatex path have no checkmark
+% glyph, so \checkmark silently vanished there.
+\providecommand{\cmark}{%
+  \tikz[baseline=0pt,x=1em,y=1em]
+    \draw[whu_blue,line width=0.13em,line cap=round,line join=round]
+      (0.05,0.32) -- (0.28,0.05) -- (0.70,0.62);%
+}
+\providecommand{\xmark}{%
+  \tikz[baseline=0pt,x=1em,y=1em]{
+    \draw[whu_anthracite,line width=0.13em,line cap=round]
+      (0.08,0.05) -- (0.60,0.57);
+    \draw[whu_anthracite,line width=0.13em,line cap=round]
+      (0.08,0.57) -- (0.60,0.05);}%
+}
+
+% ── AGENTS.md rule tag at bottom of slide ──────────────────────
+% Usage: \agentrule{Never modify the raw data in 0\_data/. It is read-only.}
+\newcommand{\agentrule}[1]{%
+  \vfill
+  {\usebeamerfont{footnote}\itshape\textcolor{whu_anthracite}{AGENTS.md: ``#1''}}%
+}
 
 \mode<all>
 \usepackage{wrapfig}
@@ -545,7 +550,7 @@
 Pipeline}
 \subtitle{Doctoral Orientation Week}
 \author{Dr.~Victor van Pelt}
-\date{July 23, 2026}
+\date{July 30, 2026}
 \institute{WHU -- Otto Beisheim School of Management}
 
 \begin{document}
