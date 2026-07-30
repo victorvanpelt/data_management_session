@@ -138,11 +138,11 @@
  
 
 
-% WHU beamer theme (16:9) - v4
+% WHU beamer theme (16:9) - v4.2
 % Usage (qmd):  include-in-header: talk_template.sty   (Quarto, lualatex)
 % Usage (tex):  \input{talk_template.sty}              (hand-written beamer, xelatex)
 % Requires 00_whu_logo.png in the working directory.
-\ProvidesFile{talk_template.sty}[2026/07/30 WHU beamer theme v4]
+\ProvidesFile{talk_template.sty}[2026/07/30 WHU beamer theme v4.2]
 
 \mode<presentation>
 
@@ -247,7 +247,7 @@
     \useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
     \ifnum\thepage=1\relax
       \fill[white] (0,0) rectangle(\the\paperwidth,\the\paperheight);
-      \fill[whu_blue!60] (0,0) rectangle(1.5,1.9);
+      \fill[whu_lightblue] (0,0) rectangle(1.5,1.9);
       \fill[whu_blue] (1.6,0) rectangle(\the\paperwidth,1.9);
       \node[anchor=west,text=white,font=\small] at (1.7,1.18) {\insertinstitute};
       \node[anchor=west,text=white,font=\small] at (1.7,0.6) {\insertdate};
@@ -262,12 +262,15 @@
 {%
   \vskip.5cm
   \includegraphics[keepaspectratio,height=1.5cm]{materials/00_whu_logo.png}
-  \vskip1.5cm
+  % the two 1.5cm gaps can shrink: a long multi-line title then compresses
+  % them instead of pushing the author block down into the bottom bar, where
+  % it would overprint the institute line (blue on blue, ghost strokes)
+  \vskip1.5cm minus 1.1cm
   \begin{beamercolorbox}[wd=12cm,leftskip=0.6cm,#1]{title page header}
     \usebeamerfont{title}\inserttitle\par
     \usebeamerfont{subtitle}\insertsubtitle\par
   \end{beamercolorbox}
-  \vskip1.5cm
+  \vskip1.5cm minus 1.1cm
   \begin{beamercolorbox}[wd=12cm,leftskip=0.6cm,sep=1pt,#1]{author}
     \usebeamerfont{author}\insertauthor
   \end{beamercolorbox}
@@ -291,7 +294,7 @@
   \begin{beamercolorbox}[wd=\paperwidth,ht=0.5cm]{frametitle}
     \begin{tikzpicture}
       \useasboundingbox[fill=white] (0,0) rectangle(\the\paperwidth,0.5);
-      \fill[whu_blue!60] (0,0) rectangle(1.5,1.2);
+      \fill[whu_lightblue] (0,0) rectangle(1.5,1.2);
       \fill[whu_blue] (1.6,0) rectangle(\the\paperwidth,1.2);
       \ifx\insertframesubtitle\@empty%
         \node[anchor=west,white,font=\large] at (1.7,0.6) {\insertframetitle};
@@ -319,7 +322,7 @@
     \makebox[0pt][l]{%
     \begin{tikzpicture}
       \useasboundingbox (0,0) rectangle(\the\paperwidth,3);
-      \fill[whu_blue!60] (0,1.0) rectangle(1.5,2.2);
+      \fill[whu_lightblue] (0,1.0) rectangle(1.5,2.2);
       \fill[whu_blue] (1.6,1.0) rectangle(\the\paperwidth,2.2);
       \node[anchor=west,white,font=\LARGE\bfseries] at (1.7,1.6) {#1};
     \end{tikzpicture}%
