@@ -1,8 +1,10 @@
-% WHU beamer theme (16:9) - v4.2
+% WHU beamer theme (16:9) - v5.6 "Air"
 % Usage (qmd):  include-in-header: talk_template.sty   (Quarto, lualatex)
 % Usage (tex):  \input{talk_template.sty}              (hand-written beamer, xelatex)
 % Requires 00_whu_logo.png in the working directory.
-\ProvidesFile{talk_template.sty}[2026/07/30 WHU beamer theme v4.2]
+% Font: Lato (TeX Live package "lato"); falls back to TeX Gyre Heros, then
+% to the engine default, so the theme compiles on hosts without Lato.
+\ProvidesFile{talk_template.sty}[2026/07/30 WHU beamer theme v5.6]
 
 \mode<presentation>
 
@@ -15,21 +17,34 @@
 \RequirePackage{ragged2e}
 \RequirePackage{amsmath,amssymb}
 \RequirePackage{appendixnumberbeamer}
+\RequirePackage{iftex}
 
 % ── Fonts ───────────────────────────────────────────────────────
 % Keep beamer from substituting text fonts into math mode.
 \usefonttheme{professionalfonts}
-% Quarto's lualatex path loads fontspec + unicode-math BEFORE this file.
-% In that case, set a real math font so \times, \rightarrow, the math
-% minus, and \checkmark render (they silently dropped before v4).
-% Without fontspec (hand-written .tex via xelatex), keep the legacy setup.
-\IfPackageLoadedTF{fontspec}{%
-  \IfPackageLoadedTF{unicode-math}{\setmathfont{Latin Modern Math}}{}%
-}{%
-  \RequirePackage{lmodern}
+% On xetex/luatex load Lato via fontspec (by filename, so kpathsea finds it
+% on both engines with the TeX Live "lato" package installed). Quarto's
+% lualatex path loads fontspec + unicode-math BEFORE this file; in that case
+% also set a real math font so \times, \rightarrow, and the math minus
+% render (they silently dropped before v4).
+\ifPDFTeX
   \RequirePackage[T1]{fontenc}
   \RequirePackage[utf8]{inputenc}
-}
+  % Lato ships pdflatex (Type1) support in the same TeX Live package;
+  % fall back to lmodern where it is absent so the theme still compiles.
+  \IfFileExists{lato.sty}{\RequirePackage[defaultsans]{lato}}{\RequirePackage{lmodern}}
+\else
+  \IfPackageLoadedTF{fontspec}{}{\RequirePackage{fontspec}}
+  \IfFontExistsTF{Lato-Regular.ttf}{%
+    \setsansfont{Lato-Regular.ttf}[%
+      BoldFont=Lato-Bold.ttf,
+      ItalicFont=Lato-Italic.ttf,
+      BoldItalicFont=Lato-BoldItalic.ttf]%
+  }{%
+    \IfFontExistsTF{TeX Gyre Heros}{\setsansfont{TeX Gyre Heros}}{}%
+  }%
+  \IfPackageLoadedTF{unicode-math}{\setmathfont{Latin Modern Math}}{}%
+\fi
 
 % ── Colors ──────────────────────────────────────────────────────
 % WHU Color Guidelines: primary = WHU Blue + WHU Light Blue (+ white);
@@ -57,16 +72,16 @@
 
 % ── Global beamer color setup ───────────────────────────────────
 \setbeamercolor*{title}{fg=whu_blue}
-\setbeamercolor*{subtitle}{fg=whu_blue}
+\setbeamercolor*{subtitle}{fg=whu_anthracite}
 \setbeamercolor*{title page header}{fg=whu_blue}
 \setbeamercolor*{author}{fg=whu_blue}
-\setbeamercolor*{institute}{fg=white}
-\setbeamercolor*{date}{fg=white}
+\setbeamercolor*{institute}{fg=whu_anthracite}
+\setbeamercolor*{date}{fg=whu_anthracite}
 \setbeamercolor*{normal text}{fg=black}
 
-% Items
-\setbeamercolor*{item}{fg=whu_blue}
-\setbeamercolor*{itemize item}{fg=whu_blue}
+% Items (light-blue markers, the accent of this theme)
+\setbeamercolor*{item}{fg=whu_lightblue}
+\setbeamercolor*{itemize item}{fg=whu_lightblue}
 \setbeamercolor*{itemize subitem}{parent=itemize item}
 \setbeamercolor*{itemize subsubitem}{parent=itemize item}
 \setbeamercolor*{enumerate item}{fg=whu_blue}
@@ -75,7 +90,7 @@
 \setbeamerfont{description item}{series=\bfseries}
 
 \setbeamercolor*{frametitle}{fg=whu_blue}
-\setbeamercolor*{page number in head/foot}{fg=whu_blue}
+\setbeamercolor*{page number in head/foot}{fg=whu_anthracite}
 
 % Blocks (primary-blue family only)
 \setbeamercolor*{block title}{fg=whu_blue,bg=whu_silvergray}
@@ -86,8 +101,8 @@
 \setbeamercolor*{block body example}{fg=black,bg=whu_lightblue!15}
 
 % ── Font sizes ──────────────────────────────────────────────────
-\setbeamerfont{title}{size=\LARGE,series=\bfseries}
-\setbeamerfont{subtitle}{size=\large}
+\setbeamerfont{title}{size=\huge,series=\bfseries}
+\setbeamerfont{subtitle}{size=\Large}
 \setbeamerfont{frametitle}{size=\large,series=\bfseries}
 \setbeamerfont{framesubtitle}{size=\small}
 \setbeamerfont{block title}{size=\normalsize,series=\bfseries}
@@ -99,74 +114,91 @@
 % ── Navigation / footline ──────────────────────────────────────
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{blocks}[rounded][shadow=false]
-\setbeamertemplate{footline}[frame number]
+% Page number bottom right; the number is not printed on the title page,
+% but the footline always occupies the same height (the strut), so the
+% text area ends ~0.65cm above the bottom strip on EVERY page. A footline
+% that collapses to nothing lets bottom-anchored content (\vfill, \source,
+% the title page's date line) run onto the strip.
+\setbeamertemplate{footline}{%
+  \hbox{\begin{beamercolorbox}[wd=\paperwidth,ht=2.2ex,dp=1ex,right]{page number in head/foot}%
+    \tiny
+    \ifnum\insertframenumber>1
+      \insertframenumber\,/\,\inserttotalframenumber
+    \fi
+    \hspace*{0.5cm}%
+  \end{beamercolorbox}}%
+  \vskip0.12cm
+}
 
-% ── Background ──────────────────────────────────────────────────
+% ── Background: white + thin light-blue baseline strip ──────────
 \setbeamertemplate{background}{%
   \begin{tikzpicture}
     \useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
-    \ifnum\thepage=1\relax
-      \fill[white] (0,0) rectangle(\the\paperwidth,\the\paperheight);
-      \fill[whu_lightblue] (0,0) rectangle(1.5,1.9);
-      \fill[whu_blue] (1.6,0) rectangle(\the\paperwidth,1.9);
-      \node[anchor=west,text=white,font=\small] at (1.7,1.18) {\insertinstitute};
-      \node[anchor=west,text=white,font=\small] at (1.7,0.6) {\insertdate};
-    \else
-      \fill[white] (0,0) rectangle(\the\paperwidth,\the\paperheight);
-    \fi
+    \fill[white] (0,0) rectangle(\the\paperwidth,\the\paperheight);
+    \fill[whu_lightblue] (0,0) rectangle(\the\paperwidth,0.12);
   \end{tikzpicture}%
 }
 
 % ── Title page ──────────────────────────────────────────────────
-\defbeamertemplate*{title page}{whu266}[1][]
+% Everything sits on one left edge (the text margin). The author gap can
+% shrink so a long multi-line title compresses it instead of overflowing.
+\defbeamertemplate*{title page}{whuair}[1][]
 {%
-  \vskip.5cm
-  \includegraphics[keepaspectratio,height=1.5cm]{materials/00_whu_logo.png}
-  % the two 1.5cm gaps can shrink: a long multi-line title then compresses
-  % them instead of pushing the author block down into the bottom bar, where
-  % it would overprint the institute line (blue on blue, ghost strokes)
-  \vskip1.5cm minus 1.1cm
-  \begin{beamercolorbox}[wd=12cm,leftskip=0.6cm,#1]{title page header}
-    \usebeamerfont{title}\inserttitle\par
-    \usebeamerfont{subtitle}\insertsubtitle\par
-  \end{beamercolorbox}
-  \vskip1.5cm minus 1.1cm
-  \begin{beamercolorbox}[wd=12cm,leftskip=0.6cm,sep=1pt,#1]{author}
-    \usebeamerfont{author}\insertauthor
-  \end{beamercolorbox}
-  % institute + date are drawn onto the bottom bar by the page-1 background
-  % template (so the date is never clipped). Reserve their original vertical
-  % footprint here so the title and author keep their previous position.
-  \vskip2.05cm
+  % Quarto/pandoc loads parskip (6pt per \par); inside this hand-spaced
+  % layout that adds ~36pt and pushes the date onto the bottom strip.
+  \setlength{\parskip}{0pt}%
+  \vskip.7cm
+  \includegraphics[keepaspectratio,height=1.3cm]{materials/00_whu_logo.png}
+  \vfill
+  {\color{whu_lightblue}\rule{1.6cm}{4pt}}\par
+  \vskip10pt
+  {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}
+  \vskip6pt
+  {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+  \vskip1.1cm minus 0.85cm
+  {\large\usebeamercolor[fg]{author}\insertauthor\par}
+  \vskip8pt
+  {\small\usebeamercolor[fg]{institute}\insertinstitute\par}
+  \vskip2pt
+  {\small\usebeamercolor[fg]{date}\insertdate\par}
+  % shrinkable: a two-line title compresses this gap instead of pushing
+  % the date line down onto the bottom strip
+  \vskip1.0cm minus 0.7cm
   \vfil
 }
-\setbeamertemplate{title page}[whu266]
+\setbeamertemplate{title page}[whuair]
 
 % ── Items / ToC ─────────────────────────────────────────────────
 \setbeamertemplate{items}[square]
 \setbeamertemplate{sections/subsections in toc}[square]
 
-% ── Frame title ─────────────────────────────────────────────────
+% ── Frame title: blue text + two-tone accent rule ───────────────
 \makeatletter
-\defbeamertemplate*{frametitle}{whu266}[1][]
+\defbeamertemplate*{frametitle}{whuair}[1][]
 {%
-  \vskip0.6cm%
-  \begin{beamercolorbox}[wd=\paperwidth,ht=0.5cm]{frametitle}
-    \begin{tikzpicture}
-      \useasboundingbox[fill=white] (0,0) rectangle(\the\paperwidth,0.5);
-      \fill[whu_lightblue] (0,0) rectangle(1.5,1.2);
-      \fill[whu_blue] (1.6,0) rectangle(\the\paperwidth,1.2);
-      \ifx\insertframesubtitle\@empty%
-        \node[anchor=west,white,font=\large] at (1.7,0.6) {\insertframetitle};
-      \else%
-        \node[anchor=west,white,font=\large] at (1.7,0.75) {\insertframetitle};
-        \node[anchor=west,white,font=\small] at (1.7,0.35) {\insertframesubtitle};
-      \fi
-    \end{tikzpicture}
-  \end{beamercolorbox}
+  % A whitespace-only title (pandoc's "## &nbsp;" divider trick) draws
+  % nothing: no title text, no accent rule.
+  \sbox{\whudiagbox}{\usebeamerfont{frametitle}\insertframetitle}%
+  \ifdim\wd\whudiagbox<0.35em\else
+  \setlength{\parskip}{0pt}% neutralize Quarto's parskip inside the title block
+  \vskip0.75cm%
+  {\usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}%
+   \raggedright\hyphenpenalty=10000\insertframetitle\par}%
+  \ifx\insertframesubtitle\@empty\else
+    \vskip2pt{\usebeamerfont{framesubtitle}\color{whu_anthracite}%
+     \raggedright\hyphenpenalty=10000\insertframesubtitle\par}%
+  \fi
+  \vskip5pt
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle(\the\textwidth,0.06);
+    \draw[whu_lightblue,line width=2.4pt] (0,0.03) -- (1.3,0.03);
+    \draw[whu_silvergray,line width=0.9pt] (1.3,0.03) -- (\the\textwidth,0.03);
+  \end{tikzpicture}%
+  \vskip2pt
+  \fi
 }
 \makeatother
-\setbeamertemplate{frametitle}[whu266]
+\setbeamertemplate{frametitle}[whuair]
 
 % ═════════════════════════════════════════════════════════════════
 % UTILITY MACROS - Full toolkit for varied slide layouts
@@ -178,15 +210,9 @@
 \newcommand{\sectionslide}[1]{%
   \begin{frame}[plain]
     \vfill
-    \hspace*{-\dimexpr(\paperwidth-\textwidth)/2\relax}%
-    \makebox[0pt][l]{%
-    \begin{tikzpicture}
-      \useasboundingbox (0,0) rectangle(\the\paperwidth,3);
-      \fill[whu_lightblue] (0,1.0) rectangle(1.5,2.2);
-      \fill[whu_blue] (1.6,1.0) rectangle(\the\paperwidth,2.2);
-      \node[anchor=west,white,font=\LARGE\bfseries] at (1.7,1.6) {#1};
-    \end{tikzpicture}%
-    }
+    {\color{whu_lightblue}\rule{1.6cm}{4pt}}\par
+    \vskip10pt
+    {\LARGE\bfseries\color{whu_blue}#1\par}
     \vfill
   \end{frame}%
 }
@@ -197,18 +223,26 @@
 %   \highlightbox{\textbf{\textcolor{whu_blue}{Key takeaway:}} ...}
 \newcommand{\highlightbox}[1]{%
   \begin{tikzpicture}
-    \node[fill=whu_silvergray,rounded corners=3pt,inner sep=8pt,
-          text width=\linewidth-20pt] {#1};
+    \node[fill=whu_blue!5,inner sep=9pt,
+          text width=\linewidth-20pt] (hb)
+          {{\RaggedRight\hyphenpenalty=10000 #1\par}};
+    \fill[whu_lightblue] (hb.north west) rectangle ([xshift=2.5pt]hb.south west);
   \end{tikzpicture}%
 }
 
-% Deprecated box aliases - kept so pre-v4 decks compile; all of them
-% now render as a \highlightbox with their printed label preserved.
-\newcommand{\discussionprompt}[1]{\highlightbox{#1}}
-\newcommand{\how}[1]{%
-  \highlightbox{\textbf{\textcolor{whu_blue}{How?}} #1}}
-\newcommand{\takeaway}[1]{%
-  \highlightbox{\textbf{\textcolor{whu_blue}{Key takeaway:}} #1}}
+% Legacy names - plain synonyms of \highlightbox so pre-v5 decks compile.
+\newcommand{\discussionprompt}{\highlightbox}
+\newcommand{\how}{\highlightbox}
+\newcommand{\takeaway}{\highlightbox}
+
+% ── Fitted image: never overruns the bottom strip ─────────────
+% Usage: \fitimage{file.png}            (fills width, capped height)
+%        \fitimage[0.5\linewidth]{file} (narrower, same height cap)
+% The 0.62\textheight cap leaves room for a one-line caption below the
+% image on a titled slide. An uncapped tall image is the single most
+% common cause of captions being pushed onto the bottom strip.
+\newcommand{\fitimage}[2][\linewidth]{%
+  \includegraphics[width=#1,height=0.62\textheight,keepaspectratio]{#2}}
 
 % ── Source citation at bottom of slide ─────────────────────────
 % Usage: \source{Author (Year)}
@@ -251,18 +285,25 @@
   \vfill
   \begin{center}
     \begin{minipage}{0.8\linewidth}
-      {\Large\itshape\textcolor{whu_anthracite}{``#1''}}\\[10pt]
+      {\Large\itshape\raggedright\hyphenpenalty=10000\textcolor{whu_anthracite}{``#1''}}\\[10pt]
       \hfill{\normalsize\textcolor{whu_blue}{\textbf{#2}}}
     \end{minipage}
   \end{center}
   \vfill
 }
 
+% ── Diagram fit guard ──────────────────────────────────────────
+% \process and \processcycle draw at natural size, then shrink only if
+% the result is wider than the line (process) or taller than the body of
+% a titled frame (processcycle). Never upscales.
+\newsavebox{\whudiagbox}
+
 % ── Horizontal process flow ────────────────────────────────────
 % Usage: \process{Step 1,Step 2,Step 3,Step 4}
 % Usage: \process{Step 1/whu_lightblue,Step 2,Step 3}
 \newcommand{\process}[1]{%
   \begin{center}
+  \sbox{\whudiagbox}{%
   \begin{tikzpicture}[
     node distance=0.3cm,
     flowstep/.style={rectangle,rounded corners=3pt,fill=whu_blue,
@@ -283,7 +324,12 @@
         \draw[arr] (s\prev) -- (s\i);
       \fi
     }
-  \end{tikzpicture}
+  \end{tikzpicture}}%
+  \ifdim\wd\whudiagbox>\linewidth
+    \resizebox{\linewidth}{!}{\usebox{\whudiagbox}}%
+  \else
+    \usebox{\whudiagbox}%
+  \fi
   \end{center}%
 }
 
@@ -296,6 +342,7 @@
     \xdef\totalsteps{\tmp}%
   }%
   \begin{center}
+  \sbox{\whudiagbox}{%
   \begin{tikzpicture}[
     flowstep/.style={rectangle,rounded corners=3pt,fill=whu_blue,
                  text=white,font=\small\bfseries,
@@ -314,7 +361,12 @@
       \pgfmathtruncatemacro{\next}{int(mod(\i,\totalsteps)+1)}%
       \draw[arr] (s\i) -- (s\next);%
     }
-  \end{tikzpicture}
+  \end{tikzpicture}}%
+  \ifdim\dimexpr\ht\whudiagbox+\dp\whudiagbox\relax>5.8cm
+    \resizebox{!}{5.8cm}{\usebox{\whudiagbox}}%
+  \else
+    \usebox{\whudiagbox}%
+  \fi
   \end{center}%
 }
 
@@ -344,8 +396,7 @@
       (0.08,0.57) -- (0.60,0.05);}%
 }
 
-% ── AGENTS.md rule tag at bottom of slide ──────────────────────
-% Usage: \agentrule{Never modify the raw data in 0\_data/. It is read-only.}
+% ── AGENTS.md rule quote (research-pipeline decks only) ────────
 \newcommand{\agentrule}[1]{%
   \vfill
   {\usebeamerfont{footnote}\itshape\textcolor{whu_anthracite}{AGENTS.md: ``#1''}}%

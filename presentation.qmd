@@ -170,7 +170,7 @@ The repository also ships a rulebook for AI agents ("*AGENTS.md*"): more in chap
 
 \centering
 
-![](images/paste-4.png){height="235"}
+![](images/paste-4.png){height="195"}
 
 The same analysis also ships in R ("*code.r*") and Quarto ("*code.qmd*")
 
@@ -188,7 +188,7 @@ How would you reproduce all results of your current project?
 
 \centering
 
-A makefile states which outputs depend on which code and data, and how to rebuild them ![](images/paste-19.png){fig-align="center" height="235"}
+A makefile states which outputs depend on which code and data, and how to rebuild them ![](images/paste-19.png){fig-align="center" height="175"}
 
 ## 1. Directory Structure: makefile.mak in root
 
@@ -295,7 +295,7 @@ Download GitHub Desktop for Windows or macOS [**here**](https://desktop.github.c
 
 \centering
 
-The example repository ignores everything by default, then allows back what should be shared: the safest default for private data ![](images/paste-5.png){fig-align="center" height="210"}
+The example repository ignores everything by default, then allows back what should be shared: the safest default for private data ![](images/paste-5.png){fig-align="center" height="180"}
 
 ## 2. Version control: Why should you care?
 
@@ -396,7 +396,7 @@ Usage:
 
 "*make appendix*", "*make paper*", and "*make slides*" render the Quarto drafts from the pipeline's output
 
-![](images/paste-13.png){fig-align="center" height="215"}
+![](images/paste-13.png){fig-align="center" height="155"}
 
 # 4. AI Agents and Systems
 
