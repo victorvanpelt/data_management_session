@@ -135,7 +135,8 @@ Following principles is critical, especially for projects with lots of data and 
 -   Make your code deterministic: set a seed for random and stochastic processes.
 -   Pin your environment: "*version*" in Stata, *renv* in R.
 -   Use plenty of comments to explain what the code is doing.
--   Be as descriptive as you can in folder and file names.
+-   Be as descriptive as you can in folder and file names; avoid special characters.
+-   Prefer tool-agnostic file formats: a "*.csv*" opens anywhere, for anyone.
 -   Use environment variables for credentials and software paths.
 -   Follow a template for a research pipeline ([**TIER Protocol**](https://www.projecttier.org/tier-protocol/protocol-4-0/)); the example repository follows its concept.
     -   E.g., a codebook ("*0_data/codebook.md*") defines each variable and the data's origin.
@@ -405,7 +406,7 @@ Usage:
 You share a research repository with two coauthors. Each of you has an AI agent working in it, and each agent edits files and runs commands on its own. What could go wrong?
 
 ::: notes
-Let the room answer first. Two or three hands, no correcting yet. Good answers all move in one direction: nobody can say anymore what changed, why, or whether the results still rebuild. One agent edits the raw data, another patches a table by hand, a third pastes in numbers with no code behind them. Three coauthors, three tools, three sets of habits, one shared repository. This chapter works through that problem: first the damage, then the shared rulebook that prevents it, and at the end advice for your own personal setup.
+Let the room answer first. Two or three hands, no correcting yet. Good answers all move in one direction: nobody can say anymore what changed, why, or whether the results still rebuild. One agent edits the raw data, another patches a table by hand, a third pastes in numbers with no code behind them. Three coauthors, three tools, three sets of habits, one shared repository. This chapter works through that problem: first the damage, then the shared rulebook that prevents it, then the two messages that survive any tool change (you stay in the loop, and AI-touched data is generated data), and at the end advice for your own personal setup.
 :::
 
 ## 4. AI agents: From chatbots to agents inside your project
@@ -549,6 +550,37 @@ Suppose make fails after the agent's edit, maybe a data type mismatch in the new
 A diff shows what is changing right now. The commit history shows what changed ever. Keep commits small, one change each, and write messages that say why. When a supervisor asks in March what the agent touched in January, the answer is git log, not memory. For bigger changes, have the agent work on a branch and open a pull request; then review is not a habit, it is a gate. The screenshot is the example repository's own history, including a commit an agent helped write, and yes, also a few older messages that just say "update." Do as I say, not as I did.
 :::
 
+## 4. AI agents: The researcher stays in the loop
+
+-   AI assists; it is never author, analyst, or judge
+-   Verify everything it touched: sources, numbers, code, interpretation
+-   The pipeline hands you the gates: read the diff, rerun *make*, check the trail
+-   A gate you wave things through is decoration, not verification
+
+\bigbreak
+
+\highlightbox{Stay in the loop: nothing an AI produced enters your paper unverified.}
+
+::: notes
+The last three slides were mechanics: read the diff, rerun the pipeline, keep the trail. This slide is the principle behind them, and the first of two messages I want you to take home from this chapter. The division of labor is fixed: the AI assists, and we remain author, analyst, and judge. It can draft code, propose a merge, suggest a robustness check. It does not decide what enters the paper. That decision passes through verification, and verification means checking exactly what we would check for a new coauthor: the sources exist, the numbers rebuild, the code does what it claims, the interpretation is ours. The pipeline makes this cheap. The diff shows what changed, make shows whether it still rebuilds, the commit history shows what happened over time. But a gate only works if someone stands at it. If we wave the agent's work through, the gates are decoration. The German research funder DFG puts it in one line: responsibility for what is published remains with the researcher, never with the tool.
+:::
+
+## 4. AI agents: When AI touches data, it becomes generated data
+
+-   Raw data stays untouched in "*0_data*": the record of what actually happened
+-   Once AI cleans, codes, merges, or edits a data file, the output is generated data: the model's choices are inside it
+-   Structuring data is a research act, even when software performs it [@BNS_2016]
+-   Keep every AI transformation as code in "*1_code*": rerunnable, reviewable, visible in the diff
+-   Disclose the touch: tool, task, your verification, and whether AI output entered the final data
+
+\bigbreak
+
+\highlightbox{Data an AI touched is generated data, not naturally occurring data. Keep the transformation in code, and disclose it.}
+
+::: notes
+The second message is about the data itself. Our field distinguishes data we merely observe from data someone shaped. Bloomfield, Nelson, and Soltes call structuring one of the five data-gathering tasks: turning records into analyzable datasets involves choices about what to keep, how to code it, what to drop. And they are explicit that hand-collection is a metaphor: a computer program that processes documents is structuring data all the same. So when an AI cleans a file, codes open answers, fills gaps, or merges two sources, it has performed a research act on our data. The output is generated data. The model's choices are baked in, and they are invisible in the file itself: ask the same model tomorrow and you get a different file. If you know this framework, you may object that Compustat is also structured by someone else and archival researchers still call it naturally occurring. But a vendor's structuring is documented, stable, and shared by the whole field, and it happened before and independent of our research question. An AI transformation happens inside our project, steered by our prompt: its choices are our choices, delegated, and they are written down nowhere unless we keep them in code. That is why the touch must live in code. If the transformation sits in 1_code, it reruns, the diff shows every choice, and the codebook says where each variable came from. That is also the disclosure story. When a method section or a journal asks what AI did to the data, the commit history and the codebook already contain the answer: the tool, the task, how it was verified, and whether AI output entered the final dataset. Others keep a separate AI-use log for this; with the pipeline, the log already exists. Hiding the touch is what turns a helpful tool into a validity problem.
+:::
+
 ## 4. AI agents: Rules of engagement
 
 ::::: columns
@@ -636,6 +668,7 @@ Five starting rules, all provisional, because the tools change quickly, as the p
     3.  Integrate multiple languages (try Quarto)
     4.  Let AI write pipeline code; never let it do the research for you
         -   Prefer a skill-first setup: keep the researcher in the loop
+        -   If AI touched the data, it is generated data: keep the transformation in code and disclose it
 -   If you don't want to do it for science, then do it to save yourself lots of time and headache.
 
 \centering

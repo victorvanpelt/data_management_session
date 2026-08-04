@@ -604,7 +604,7 @@
 Pipeline}
 \subtitle{Doctoral Orientation Week}
 \author{Dr.~Victor van Pelt}
-\date{July 30, 2026}
+\date{August 4, 2026}
 \institute{WHU -- Otto Beisheim School of Management}
 
 \begin{document}
@@ -822,7 +822,11 @@ data and code:
 \item
   Use plenty of comments to explain what the code is doing.
 \item
-  Be as descriptive as you can in folder and file names.
+  Be as descriptive as you can in folder and file names; avoid special
+  characters.
+\item
+  Prefer tool-agnostic file formats: a ``\emph{.csv}'' opens anywhere,
+  for anyone.
 \item
   Use environment variables for credentials and software paths.
 \item
@@ -1364,8 +1368,10 @@ changed, why, or whether the results still rebuild. One agent edits the
 raw data, another patches a table by hand, a third pastes in numbers
 with no code behind them. Three coauthors, three tools, three sets of
 habits, one shared repository. This chapter works through that problem:
-first the damage, then the shared rulebook that prevents it, and at the
-end advice for your own personal setup.}
+first the damage, then the shared rulebook that prevents it, then the
+two messages that survive any tool change (you stay in the loop, and
+AI-touched data is generated data), and at the end advice for your own
+personal setup.}
 \end{frame}
 
 \begin{frame}{4. AI agents: From chatbots to agents inside your project}
@@ -1657,6 +1663,96 @@ yes, also a few older messages that just say ``update.'' Do as I say,
 not as I did.}
 \end{frame}
 
+\begin{frame}{4. AI agents: The researcher stays in the loop}
+\phantomsection\label{ai-agents-the-researcher-stays-in-the-loop}
+\begin{itemize}
+\tightlist
+\item
+  AI assists; it is never author, analyst, or judge
+\item
+  Verify everything it touched: sources, numbers, code, interpretation
+\item
+  The pipeline hands you the gates: read the diff, rerun \emph{make},
+  check the trail
+\item
+  A gate you wave things through is decoration, not verification
+\end{itemize}
+
+\bigbreak
+
+\highlightbox{Stay in the loop: nothing an AI produced enters your paper unverified.}
+
+\note{The last three slides were mechanics: read the diff, rerun the
+pipeline, keep the trail. This slide is the principle behind them, and
+the first of two messages I want you to take home from this chapter. The
+division of labor is fixed: the AI assists, and we remain author,
+analyst, and judge. It can draft code, propose a merge, suggest a
+robustness check. It does not decide what enters the paper. That
+decision passes through verification, and verification means checking
+exactly what we would check for a new coauthor: the sources exist, the
+numbers rebuild, the code does what it claims, the interpretation is
+ours. The pipeline makes this cheap. The diff shows what changed, make
+shows whether it still rebuilds, the commit history shows what happened
+over time. But a gate only works if someone stands at it. If we wave the
+agent's work through, the gates are decoration. The German research
+funder DFG puts it in one line: responsibility for what is published
+remains with the researcher, never with the tool.}
+\end{frame}
+
+\begin{frame}{4. AI agents: When AI touches data, it becomes generated
+data}
+\phantomsection\label{ai-agents-when-ai-touches-data-it-becomes-generated-data}
+\begin{itemize}
+\tightlist
+\item
+  Raw data stays untouched in ``\emph{0\_data}'': the record of what
+  actually happened
+\item
+  Once AI cleans, codes, merges, or edits a data file, the output is
+  generated data: the model's choices are inside it
+\item
+  Structuring data is a research act, even when software performs it
+  (Bloomfield, Nelson, and Soltes 2016)
+\item
+  Keep every AI transformation as code in ``\emph{1\_code}'':
+  rerunnable, reviewable, visible in the diff
+\item
+  Disclose the touch: tool, task, your verification, and whether AI
+  output entered the final data
+\end{itemize}
+
+\bigbreak
+
+\highlightbox{Data an AI touched is generated data, not naturally occurring data. Keep the transformation in code, and disclose it.}
+
+\note{The second message is about the data itself. Our field
+distinguishes data we merely observe from data someone shaped.
+Bloomfield, Nelson, and Soltes call structuring one of the five
+data-gathering tasks: turning records into analyzable datasets involves
+choices about what to keep, how to code it, what to drop. And they are
+explicit that hand-collection is a metaphor: a computer program that
+processes documents is structuring data all the same. So when an AI
+cleans a file, codes open answers, fills gaps, or merges two sources, it
+has performed a research act on our data. The output is generated data.
+The model's choices are baked in, and they are invisible in the file
+itself: ask the same model tomorrow and you get a different file. If you
+know this framework, you may object that Compustat is also structured by
+someone else and archival researchers still call it naturally occurring.
+But a vendor's structuring is documented, stable, and shared by the
+whole field, and it happened before and independent of our research
+question. An AI transformation happens inside our project, steered by
+our prompt: its choices are our choices, delegated, and they are written
+down nowhere unless we keep them in code. That is why the touch must
+live in code. If the transformation sits in 1\_code, it reruns, the diff
+shows every choice, and the codebook says where each variable came from.
+That is also the disclosure story. When a method section or a journal
+asks what AI did to the data, the commit history and the codebook
+already contain the answer: the tool, the task, how it was verified, and
+whether AI output entered the final dataset. Others keep a separate
+AI-use log for this; with the pipeline, the log already exists. Hiding
+the touch is what turns a helpful tool into a validity problem.}
+\end{frame}
+
 \begin{frame}{4. AI agents: Rules of engagement}
 \phantomsection\label{ai-agents-rules-of-engagement}
 \begin{columns}[T]
@@ -1868,6 +1964,9 @@ who made it.}
     \tightlist
     \item
       Prefer a skill-first setup: keep the researcher in the loop
+    \item
+      If AI touched the data, it is generated data: keep the
+      transformation in code and disclose it
     \end{itemize}
   \end{enumerate}
 \item
@@ -1949,6 +2048,12 @@ Tel.: +49 (0)261 6509 483\\
 Baker, Monya. 2016. {``1,500 Scientists Lift the Lid on
 Reproducibility.''} \emph{Nature} 533 (7604): 452--54.
 \url{https://doi.org/10.1038/533452a}.
+
+\bibitem[\citeproctext]{ref-BNS_2016}
+Bloomfield, Robert, Mark W. Nelson, and Eugene Soltes. 2016.
+{``Gathering Data for Archival, Field, Survey, and Experimental
+Accounting Research.''} \emph{Journal of Accounting Research} 54 (2):
+341--95. \url{https://doi.org/10.1111/1475-679X.12104}.
 
 \bibitem[\citeproctext]{ref-CDF_2016}
 Camerer, Colin F, Anna Dreber, Eskil Forsell, Teck-Hua Ho, Jürgen Huber,
