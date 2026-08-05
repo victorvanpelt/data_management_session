@@ -58,7 +58,7 @@ In 2019, *Management Science* introduced a Data and Code Disclosure Policy:
 
 *"Authors of accepted papers… must provide… the data, programs, and other details of the experiment and computations sufficient to permit replication."*
 
-A 2024 study examined nearly 500 articles published before and after this policy was introduced to see if the results could, in fact, be reproduced [@FGHKO_2023].
+A 2024 study examined nearly 500 articles published before and after this policy was introduced to see if the results could, in fact, be reproduced [@FGHKO_2024].
 
 **What share of these articles do you think were largely reproducible?**
 
@@ -70,7 +70,7 @@ A 2024 study examined nearly 500 articles published before and after this policy
 
 \centering
 
-Across all articles under the new policy, 68% could be reproduced. When data and software were accessible, over 95% could [@FGHKO_2023]
+Across all articles under the new policy, 68% could be reproduced. When data and software were accessible, over 95% could [@FGHKO_2024]
 
 ## But there is more at stake!
 
@@ -118,7 +118,7 @@ Following principles is critical, especially for projects with lots of data and 
 
 -   Anyone can run the code anywhere and anytime, regardless of location.
 -   Anyone can understand the code and data without much effort.
--   Anyone can update the code on the spot without breaking it (dynamic coding).
+-   Anyone can change one number or one step and rerun, with no hardcoded values to hunt down.
 
 ## 1. Directory Structure: Structure the flow
 
@@ -140,6 +140,8 @@ Following principles is critical, especially for projects with lots of data and 
 -   Use environment variables for credentials and software paths.
 -   Follow a template for a research pipeline ([**TIER Protocol**](https://www.projecttier.org/tier-protocol/protocol-4-0/)); the example repository follows its concept.
     -   E.g., a codebook ("*0_data/codebook.md*") defines each variable and the data's origin.
+
+\highlightbox{Write for the stranger who inherits the project, because in two years that stranger is you.}
 
 ## 1. Directory Structure: A simple starting point
 
@@ -195,7 +197,7 @@ A makefile states which outputs depend on which code and data, and how to rebuil
 
 \centering
 
-You run "*make*" in the CLI to rebuild everything, or a single step with "*make r*", "*make stata*", "*make appendix*", "*make paper*", or "*make slides*" ![](images/paste-16.png){fig-align="center" height="125"}
+You run "*make*" in the CLI to rebuild everything, or a single step with "*make r*", "*make stata*", "*make quarto*", "*make appendix*", "*make paper*", or "*make slides*" ![](images/paste-16.png){fig-align="center" height="125"}
 
 ## 1. Directory Structure: Is your code slow?
 
@@ -395,7 +397,7 @@ Usage:
 
 \centering
 
-"*make appendix*", "*make paper*", and "*make slides*" render the Quarto drafts from the pipeline's output
+"*make appendix*", "*make paper*", and "*make slides*" render the Quarto drafts from the pipeline's output; "*make quarto*" renders the self-contained report
 
 ![](images/paste-13.png){fig-align="center" height="155"}
 
@@ -481,7 +483,7 @@ Suppose an agent takes your data and hands you the perfect table for your paper.
 \highlightbox{Your pipeline does not need to trust the agent, only to verify what it changed.}
 
 ::: notes
-This file ships with the example repository, and it already appeared in the chapter one screenshot. AGENTS.md is a README for agents and agentic systems, a convention read by more than 20 tools, including Claude Code, OpenAI Codex, Hermes, and Cursor. This is the answer to the opening problem: one tool-neutral file serves whichever agent each coauthor brings. Claude Code also reads a CLAUDE.md. The bullets on the left are the file's actual rules. It helps in 1_code and 4_drafts only. Raw data stays read-only, with one exception: the codebook is hand-maintained documentation, and the agent must keep it in sync with the data. Intermediates and outputs are rebuilt by the pipeline, never edited by hand. The three engines must stay in sync, so a change to code.r lands in code.do and code.qmd too; only the appendix block is exempt, because the Quarto report skips it. Credentials never enter the repo, the same environment-variable rule from chapter one. Two rules are newer. Before a change that touches more than one file, the agent states its plan first. And it cleans up any scratch files it creates: the folder structure is fixed. The screenshot shows the rules; below them, the file hands the agent the make targets and ends with a verification checklist: rebuild, confirm the drafts regenerated, run git status, and report anything it could not verify. The line to remember: it should work is not verification. And the rule that anchors it all bans git commit and git push: the agent leaves the diff for us. The next three slides are these rules in action.
+This file ships with the example repository, and it already appeared in the chapter one screenshot. AGENTS.md is a README for agents and agentic systems, a convention most agentic tools now read on their own, including OpenAI Codex, Cursor, and Hermes. This is the answer to the opening problem: one tool-neutral file serves whichever agent each coauthor brings. Two widely used tools do not read it yet, Claude Code and Gemini CLI, and the repository's README gives the one-line fix: a CLAUDE.md or GEMINI.md that points at AGENTS.md. That pointer file stays on your own machine, so the shared repository still ships one rulebook. The bullets on the left are the file's actual rules. It helps in 1_code and 4_drafts only. Raw data stays read-only, with one exception: the codebook is hand-maintained documentation, and the agent must keep it in sync with the data. Intermediates and outputs are rebuilt by the pipeline, never edited by hand. Credentials never enter the repo, the same environment-variable rule from chapter one. Two rules are newer. Before a change that touches more than one file, the agent states its plan first. And it cleans up any scratch files it creates: the folder structure is fixed. The screenshot shows the rules; below them, the file hands the agent the make targets and ends with a verification checklist: rebuild, confirm the drafts regenerated, run git status, and report anything it could not verify. The line to remember: it should work is not verification. And the rule that anchors it all bans git commit and git push: the agent leaves the diff for us. The next three slides are these rules in action.
 :::
 
 ## 4. AI agents: The agent edits code, you review the diff
@@ -493,7 +495,7 @@ This file ships with the example repository, and it already appeared in the chap
 -   You run git diff before committing
 -   Check: only "*1_code*" touched, and the step sits before the regression
 -   Check: "*0_data*" and "*3_output*" untouched?
--   Try it yourself: the repo's README ships this exact exercise
+-   Try it yourself: the repo's README ships this exercise
 :::
 
 ::: {.column width="58%"}
@@ -501,7 +503,7 @@ This file ships with the example repository, and it already appeared in the chap
 :::
 :::::
 
-\agentrule{Help the user make changes in 1\_code/ (analysis) or 4\_drafts/ (paper, slides, and data appendix sources) only.}
+\agentrule{Help the user make changes in 1\_code/ (analysis), 4\_drafts/ (paper, slides, and data appendix sources), and 0\_data/codebook.md only.}
 
 ::: notes
 Say we ask an agent to add a robustness check: winsorize scaled earnings at the first and ninety-ninth percentile before the main regression. The agent opens 1_code/code.r, adds the step, and reports back that it's done. Before committing anything, we run git diff and actually read it. Three things matter. First, scope: does the diff touch only 1_code, or did the agent also poke at 0_data or 3_output? It should be 1_code only, everything else gets derived by rerunning the pipeline, never hand-edited. Second, placement: is the winsorizing step inserted before the regression that uses it, not bolted onto the end of the file? Third, is anything changed by hand outside the code, a number pasted into a table, a figure edited directly? If the diff is clean on all three, we commit it with a clear message. If not, we send the agent back with exactly what's wrong, the same way we'd redirect a coauthor.
@@ -526,7 +528,7 @@ Say we ask an agent to add a robustness check: winsorize scaled earnings at the 
 \agentrule{A change is done only when make clean followed by make completes without errors and every number in the 4\_drafts/ outputs comes from the rerun pipeline, not from hand edits.}
 
 ::: notes
-Suppose make fails after the agent's edit, maybe a data type mismatch in the new winsorizing step. A good agent reads that error itself and proposes a fix, the same way it read the file in the first place. Letting it iterate is fine. What matters is what we do next. Before trusting any number in the draft, we run make clean, wiping every intermediate and output file, then make from scratch, on our own machine, not the agent's sandbox. If the pipeline reproduces cleanly from 0_data through 4_drafts, the numbers are real. This is the payoff from chapter three: because the paper and slides are dynamic documents pulling numbers straight from 3_output, rerunning the pipeline re-verifies every number in the draft. None of it comes from a chat window, all of it comes from code we can rerun. One nuance from the example repository: plain make rebuilds the R engine only. If the agent also touched code.do or code.qmd, run make stata and make quarto too. Both engines write the same table, so the comparison catches drift, like R and Stata defining percentiles differently. One more reason the rerun matters: agents are built to please, and pushed for a result they will sooner produce a plausible number than admit failure. Our own make run is the one test that cannot be flattered.
+Suppose make fails after the agent's edit, maybe a data type mismatch in the new winsorizing step. A good agent reads that error itself and proposes a fix, the same way it read the file in the first place. Letting it iterate is fine. What matters is what we do next. Before trusting any number in the draft, we run make clean, wiping every intermediate and output file, then make from scratch, on our own machine, not the agent's sandbox. If the pipeline reproduces cleanly from 0_data through 4_drafts, the numbers are real. This is the payoff from chapter three: because the paper and slides are dynamic documents pulling numbers straight from 3_output, rerunning the pipeline re-verifies every number in the draft. None of it comes from a chat window, all of it comes from code we can rerun. One nuance from the example repository: plain make rebuilds the R engine only. If the agent also touched code.do, run make stata too. R and Stata both write the same table file, so comparing the two catches drift, like the two defining percentiles differently. code.qmd is the self-contained alternative and writes nothing the drafts read, so make quarto only confirms that report still renders. One more reason the rerun matters: agents are built to please, and pushed for a result they will sooner produce a plausible number than admit failure. Our own make run is the one test that cannot be flattered.
 :::
 
 ## 4. AI agents: Commit the change, keep the trail
@@ -569,7 +571,7 @@ The last three slides were mechanics: read the diff, rerun the pipeline, keep th
 
 -   Raw data stays untouched in "*0_data*": the record of what actually happened
 -   Once AI cleans, codes, merges, or edits a data file, the output is generated data: the model's choices are inside it
--   Structuring data is a research act, even when software performs it [@BNS_2016]
+-   Structuring data is a research act, even when software performs it
 -   Keep every AI transformation as code in "*1_code*": rerunnable, reviewable, visible in the diff
 -   Disclose the touch: tool, task, your verification, and whether AI output entered the final data
 
@@ -578,7 +580,7 @@ The last three slides were mechanics: read the diff, rerun the pipeline, keep th
 \highlightbox{Data an AI touched is generated data, not naturally occurring data. Keep the transformation in code, and disclose it.}
 
 ::: notes
-The second message is about the data itself. Our field distinguishes data we merely observe from data someone shaped. Bloomfield, Nelson, and Soltes call structuring one of the five data-gathering tasks: turning records into analyzable datasets involves choices about what to keep, how to code it, what to drop. And they are explicit that hand-collection is a metaphor: a computer program that processes documents is structuring data all the same. So when an AI cleans a file, codes open answers, fills gaps, or merges two sources, it has performed a research act on our data. The output is generated data. The model's choices are baked in, and they are invisible in the file itself: ask the same model tomorrow and you get a different file. If you know this framework, you may object that Compustat is also structured by someone else and archival researchers still call it naturally occurring. But a vendor's structuring is documented, stable, and shared by the whole field, and it happened before and independent of our research question. An AI transformation happens inside our project, steered by our prompt: its choices are our choices, delegated, and they are written down nowhere unless we keep them in code. That is why the touch must live in code. If the transformation sits in 1_code, it reruns, the diff shows every choice, and the codebook says where each variable came from. That is also the disclosure story. When a method section or a journal asks what AI did to the data, the commit history and the codebook already contain the answer: the tool, the task, how it was verified, and whether AI output entered the final dataset. Others keep a separate AI-use log for this; with the pipeline, the log already exists. Hiding the touch is what turns a helpful tool into a validity problem.
+The second message is about the data itself. Our field distinguishes data we merely observe from data someone shaped. Bloomfield, Nelson, and Soltes [@BNS_2016] call structuring one of the five data-gathering tasks: turning records into analyzable datasets involves choices about what to keep, how to code it, what to drop. And they are explicit that hand-collection is a metaphor: a computer program that processes documents is structuring data all the same. So when an AI cleans a file, codes open answers, fills gaps, or merges two sources, it has performed a research act on our data. The output is generated data. The model's choices are baked in, and they are invisible in the file itself: ask the same model tomorrow and you get a different file. If you know this framework, you may object that Compustat is also structured by someone else and archival researchers still call it naturally occurring. But a vendor's structuring is documented, stable, and shared by the whole field, and it happened before and independent of our research question. An AI transformation happens inside our project, steered by our prompt: its choices are our choices, delegated, and they are written down nowhere unless we keep them in code. That is why the touch must live in code. If the transformation sits in 1_code, it reruns, the diff shows every choice, and the codebook says where each variable came from. That is also the disclosure story. When a method section or a journal asks what AI did to the data, the commit history and the codebook already contain the answer: the tool, the task, how it was verified, and whether AI output entered the final dataset. Others keep a separate AI-use log for this; with the pipeline, the log already exists. Hiding the touch is what turns a helpful tool into a validity problem.
 :::
 
 ## 4. AI agents: Rules of engagement
@@ -660,7 +662,7 @@ Five starting rules, all provisional, because the tools change quickly, as the p
 
 ## Summary and Wrap-up
 
--   Across all fields of science, reproducibility has been under threat [@OSC_2015; @B_2016; @CDF_2016; @HLL_2000; @FGHKO_2023]
+-   Across all fields of science, reproducibility has been under threat [@OSC_2015; @B_2016; @CDF_2016; @HLL_2020; @FGHKO_2024]
 -   Good data management is vital to ensure results are reproducible.
 -   You, as a WHU doctoral student, are vital:
     1.  Maintain a good directory structure
