@@ -644,6 +644,16 @@ The shared side is settled: AGENTS.md governs whatever agent or agentic system a
 Setups tend toward one of two shapes. Skill-first setups put the process in written skills, with phases, checks, and defined output. Agents still exist, but skills summon them for small tasks whose reasoning nobody needs again. Agent-first setups invert this: skills become thin notes, and autonomous agents carry the main work. Both exist among researchers, and some peers run a stable of autonomous research agents. I gravitate toward skill-first, and the reason is what research is. A finding alone is not enough. We also owe a defensible, verifiable account of how the finding was obtained. A skill is a commitment device: you write the steps before the work runs, like a methodology section. The judgment calls still arrive at your desk, one at a time. An agent makes those calls for you and shows you only the destination. A fabricated citation does not announce itself. A robustness check that was quietly skipped looks exactly like one that passed. If you are lucky, a coauthor catches it later. If you are not, a referee does. The dividing line I use: hand a task to an agent only when its intermediate output is disposable, when you would never want to see the reasoning again. When the process is the point, and in research it usually is, keep it in a skill.
 :::
 
+## 4. AI agents: Skill design for academic work
+
+\centering
+
+![](images/skill_design.png){width="98%"}
+
+::: notes
+This is my own skill design, and it is the shape of every skill I run on research and teaching work. The model plans, and I approve the plan before anything is executed. It then does the work and reviews itself, but a producer checking its own work is not independent, so the result goes to a fresh agent that only audits. Those audit rounds run like revise and resubmit, at most three, and whatever is still contested comes to me. Two gates are mine: the plan and the result. Between them I expect not to be needed, and what the process leaves behind, the plan, the comments, the responses, and my decisions, is the account of how the work was made.
+:::
+
 ## 4. AI agents: Preliminary advice for your own setup
 
 -   Pick one CLI tool; expect to replace it
