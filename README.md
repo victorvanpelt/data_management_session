@@ -10,7 +10,7 @@ The deck is one [Quarto](https://quarto.org) file, `presentation.qmd`, which ren
 research_pipeline_slidedeck/
 ├── presentation.qmd   the deck's source; this is the file to edit
 ├── presentation.pdf   the rendered slides
-├── presentation.tex   intermediate LaTeX from the render (kept for debugging)
+├── presentation.tex   intermediate LaTeX (only present if the last render failed)
 ├── images/            figures and screenshots shown on the slides
 ├── materials/         WHU beamer template, fonts, bibliography, LaTeX support files
 ├── Makefile           build tasks: `make` renders the deck
@@ -28,7 +28,7 @@ cd research_pipeline_slidedeck
 make
 ```
 
-`make` runs `quarto render presentation.qmd` and writes `presentation.pdf`. `make clean` deletes the rendered PDF and the intermediate `.tex`, so the next `make` rebuilds them from scratch. If Quarto is not on your `PATH`, point to it with `make QUARTO=/path/to/quarto`.
+`make` runs `quarto render presentation.qmd`, writes `presentation.pdf`, and deletes the intermediate `.tex` once the render succeeds; a failed render leaves the `.tex` in place for debugging. `make clean` deletes `presentation.pdf` and any leftover `.tex`. If Quarto is not on your `PATH`, point to it with `make QUARTO=/path/to/quarto`.
 
 The deck uses `date: today`, so the title slide shows the render date. Re-render shortly before the talk.
 
