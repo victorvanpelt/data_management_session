@@ -9,6 +9,7 @@ all: slides
 
 slides:
 	$(QUARTO) render presentation.qmd
+	rm -f presentation.tex
 
 clean:
 	rm -f presentation.pdf presentation.tex
