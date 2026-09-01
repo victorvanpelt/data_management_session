@@ -23,15 +23,15 @@ header-includes:
 - \AtBeginSection[]{\sectionslide{\insertsectionhead}}
 ---
 
-## Opening Question
+## Opening mini-activity
 
-Let's say you wrote a research paper and your laptop died. How long would it take you to reproduce your analyses and results (figures, tables, and overviews) with a new laptop?
+Pair up and exchange an experience you've had with managing your research files. Think about the master thesis or any other research project you've been a part of.
 
-1.  Less than one hour (easy!)
+1. Pair up in teams of two.
 
-2.  Between one hour and a day (It's possible but painful)
+2. Take a few minutes to exchange an experience.
 
-3.  More than one day (I'd be stuck)
+3. One of you reports back to the group.
 
 ## Why should YOU care about a reproducible research pipeline?
 
@@ -136,6 +136,10 @@ Over 85% of articles in economics and political science journals with sharing po
 3.  Integrating multiple engines: Example using Quarto
 
 4.  Some comments on AI in the research pipeline
+
+\centering
+
+Questions or comments so far?
 
 # 1. Directory Structure
 
@@ -276,11 +280,17 @@ You run "*make*" in the CLI to rebuild everything, or a single step with "*make 
 
 # 2. Version Control
 
-## Opening question:
+## Opening question
 
-\centering
+Let's say you wrote a research paper and your laptop died. How long would it take you to reproduce your analyses and results (figures, tables, and overviews) with a new laptop?
 
-**Whose folders look something like this?**
+a.  Less than one hour (easy!)
+
+b.  Between one hour and a day (It's possible but painful)
+
+c.  More than one day (I'd be stuck)
+
+## A lack of version control:
 
 \begin{center}
 \includegraphics[width =0.3\textwidth]{"images/pic1.png"} \\
