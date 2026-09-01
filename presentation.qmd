@@ -33,7 +33,7 @@ Let's say you wrote a research paper and your laptop died. How long would it tak
 
 3.  More than one day (I'd be stuck)
 
-## Why should YOU care about reproducible research?
+## Why should YOU care about a reproducible research pipeline?
 
 \centering
 
@@ -43,13 +43,20 @@ Storing data, code, and analyses can quickly turn into a mess:
 \includegraphics[width =0.6\textwidth]{"images/pic2.png"} \\
 \end{center}
 
-## Why should YOU care about reproducible research?
+## Story Time!
 
 \begin{center}
-Story Time!
 \bigbreak
 \includegraphics[width =0.50\textwidth]{"images/figure3.jpg"} \\
 \end{center}
+
+## Other common situations:
+
+- Code no longer works because the files it calls have moved.
+- The number of observations in a regression does not make sense due to a bad initial merge of the data. When correcting the mistake, the results change dramatically.
+- Someone suggests changing the sample definition. Updating it requires updating dozens of files because the code has been copied and pasted throughout the working directory.
+- We want to collaborate with another researcher, but opening their directory reveals hundreds of code and files. Just figuring out which coding files to run in which order takes weeks. In the end, we give up and do everything from scratch.
+- Working together in a directory on a cloud service causes everyone to be interrupted because changes one of us makes causes the other's code to break and produces conflicted copies.
 
 ## But there is more at stake!
 
@@ -96,7 +103,7 @@ Considerable heterogeneity reproducibility across fields, mostly due to size, me
 
 Over 85% of articles in economics and political science journals with sharing policies were reproducible. 72% of significant estimates stay significant and same-signed [@Brodeur_2026].
 
-## But there is more at stake!
+## Reproducible research starts with you
 
 \centering
 
@@ -106,17 +113,17 @@ Over 85% of articles in economics and political science journals with sharing po
 -   It also does not only rest on professor's shoulders. It all starts with:
 
 \begin{center}
-\includegraphics[width =0.20\textwidth]{"images/you.png"} \\
+\includegraphics[width =0.15\textwidth]{"images/you.png"} \\
 \end{center}
 
 ## The main goals of this session:
 
 -   Sharing a few basic principles, techniques, and tools. Inspired by:
-    -   [**Code and Data for the Social Sciences** (Gentzkow and Shapiro)](https://web.stanford.edu/~gentzkow/research/CodeAndData.pdf)
-    -   [**How to keep your research projects organized** (de Kok)](https://medium.com/data-science/how-to-keep-your-research-projects-organized-part-1-folder-structure-10bd56034d3a)
     -   [**Good Enough Practices in Scientific Computing** (Wilson et al.)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510)
     -   [**The TIER Protocol** (Project Tier)](https://www.projecttier.org/tier-protocol/protocol-4-0/)
--   Let's make this interactive: Please interrupt, ask questions, and tell me about your experience.
+    -   [**Code and Data for the Social Sciences** (Gentzkow and Shapiro)](https://web.stanford.edu/~gentzkow/research/CodeAndData.pdf)
+    -   [**How to keep your research projects organized** (de Kok)](https://medium.com/data-science/how-to-keep-your-research-projects-organized-part-1-folder-structure-10bd56034d3a)
+-   Please interrupt, ask questions, and share your experience.
 -   Disclaimer: Largely through the lens of a quantitative researcher.
 -   All materials for this talk are available: [**Example Repository**](https://github.com/victorvanpelt/research_pipeline_example) and [**These Slides**](https://github.com/victorvanpelt/research_pipeline_slidedeck)
 
@@ -126,19 +133,19 @@ Over 85% of articles in economics and political science journals with sharing po
 
 2.  Version control: Using Git and repositories (example using GitHub)
 
-3.  Integrating multiple languages: Example using Quarto
+3.  Integrating multiple engines: Example using Quarto
 
 4.  Some comments on AI in the research pipeline
 
 # 1. Directory Structure
 
-## What are the fundamental principles for reproducible research?
+## What are key principles of a reproducible research pipeline?
 
-**Universal research principles:**
+**Universal principles:**
 
 -   Anyone can run the code anywhere and anytime, regardless of location.
--   Anyone can understand the code and data without much effort.
--   Anyone can change one number or one step and rerun, with no hardcoded values.
+-   Anyone can understand the code and data without too much effort.
+-   Anyone can change one number or one step and reproduce everything.
 
 ## The key is to design and structure your process
 
